@@ -1,11 +1,12 @@
+import { OPENAI_API_KEY } from "../config";
 import { IProvider } from "../types/providers";
 
-const ollama: IProvider = {
-  name: "ollama",
+const openai: IProvider = {
+  name: "openai",
 
-  endpoint: "http://127.0.0.1:11434/api/chat",
+  endpoint: "https://api.openai.com/v1/chat/completions",
 
-  defaultModel: "llama3.2",
+  defaultModel: "gpt-4o-mini",
 
   getSinglePrompt: (gitDiff, payload): string => {
     const commitType = payload?.commitType;
@@ -32,17 +33,24 @@ const ollama: IProvider = {
   },
 
   getCommitMessage(prompt, payload) {
+    if (!OPENAI_API_KEY) {
+      throw new Error("Please set the OPENAI_API_KEY environment variable.");
+    }
+
     const messages = [{ role: "user", content: prompt }];
     const model = payload?.model || this.defaultModel;
     const requestBody = { model, messages, stream: false };
 
     const result = fetch(this.endpoint, {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers: {
+        "Content-Type": "application/json",
+        authorization: `Bearer ${OPENAI_API_KEY}`,
+      },
       body: JSON.stringify(requestBody),
     })
       .then((response) => response.json())
-      .then((data) => data?.message?.content)
+      .then((data) => data.choices[0].message.content)
       .catch((error) => {
         console.error(error);
         throw new Error("Failed to get commit message from ollama");
@@ -52,4 +60,4 @@ const ollama: IProvider = {
   },
 };
 
-export default ollama;
+export default openai;

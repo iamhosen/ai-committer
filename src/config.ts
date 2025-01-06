@@ -1,9 +1,12 @@
+import * as dotenv from "dotenv";
 import { getArgs } from "./helpers";
 import { TCommitTypes } from "./types/providers";
 
+dotenv.config();
+
 export const args = getArgs();
 
-export const PROVIDER = args.provider || "ollama";
+export const PROVIDER = args.provider || process.env.AI_PROVIDER || "ollama";
 
 export const MODEL: string | undefined =
   typeof args.model === "string" ? args.model : undefined;
@@ -20,3 +23,5 @@ export const NUM_COMMITS: number =
     : DEFAULT_NUM_COMMITS;
 
 export const IS_LIST = !!args.list;
+
+export const OPENAI_API_KEY = process.env.OPENAI_API_KEY;

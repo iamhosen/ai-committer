@@ -1,4 +1,4 @@
-export type TProviders = "ollama";
+export type TProviders = "ollama" | "openai";
 
 export type TCommitTypes =
   | "feat"
@@ -27,7 +27,10 @@ export interface IProvider {
   name: TProviders;
   endpoint: string;
   defaultModel: string;
-  getCommitMessage: (prompt: string, payload?: IRequestPayload) => Promise<string>;
+  getCommitMessage: (
+    prompt: string,
+    payload?: IRequestPayload
+  ) => Promise<string>;
   getSinglePrompt: (gitDiff: string, payload?: ISinglePromptPayload) => string;
   getMultiplePrompt: (
     gitDiff: string,

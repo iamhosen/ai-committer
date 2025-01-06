@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 import { execSync } from "child_process";
-import { COMMIT_TYPE, IS_LIST, MODEL, NUM_COMMITS, PROVIDER } from "./config";
+import { COMMIT_TYPE, IS_LIST, MODEL, NUM_COMMITS } from "./config";
 import { checkGitRepository, filterLockFiles } from "./helpers";
 import { getProvider } from "./providers";
 
@@ -34,9 +34,13 @@ const generateCommit = async () => {
     prompt = provider.getSinglePrompt(diff, { commitType: COMMIT_TYPE });
   }
 
-  const message = await provider.getCommitMessage(prompt, { model: MODEL });
-
-  console.log("✨  " + message);
+  try {
+    const message = await provider.getCommitMessage(prompt, { model: MODEL });
+    console.log("✨  " + message);
+  } catch (error) {
+    console.error(error);
+    process.exit(1);
+  }
 };
 
 generateCommit();
