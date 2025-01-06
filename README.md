@@ -1,5 +1,3 @@
-Here’s the updated documentation using ``` instead of triple backticks for code:
-
 # AI Committer
 
 **AI Committer** is a lightweight CLI tool designed to help developers generate professional, AI-powered git commit messages with customizable options. It supports various AI providers, models, and commit types, making it a versatile addition to your development workflow.
