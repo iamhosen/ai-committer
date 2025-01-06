@@ -36,4 +36,24 @@ const checkGitRepository = () => {
   }
 };
 
-export { getArgs, checkGitRepository };
+const filterLockFiles = (diff: string) => {
+  const lines = diff.split("\n");
+  let isLockFile = false;
+  const filteredLines = lines.filter((line) => {
+    if (
+      line.match(
+        /^diff --git a\/(.*\/)?(yarn\.lock|pnpm-lock\.yaml|package-lock\.json)/
+      )
+    ) {
+      isLockFile = true;
+      return false;
+    }
+    if (isLockFile && line.startsWith("diff --git")) {
+      isLockFile = false;
+    }
+    return !isLockFile;
+  });
+  return filteredLines.join("\n");
+};
+
+export { getArgs, checkGitRepository, filterLockFiles };

@@ -11,7 +11,7 @@ export type TCommitTypes =
   | "chore";
 
 export interface IRequestPayload {
-  model: string;
+  model?: string;
 }
 
 export interface ISinglePromptPayload {
@@ -26,7 +26,7 @@ export interface IMultiplePromptPayload {
 export interface IProvider {
   name: TProviders;
   endpoint: string;
-  models: string[];
+  defaultModel: string;
   getCommitMessage: (prompt: string, payload?: IRequestPayload) => Promise<string>;
   getSinglePrompt: (gitDiff: string, payload?: ISinglePromptPayload) => string;
   getMultiplePrompt: (
