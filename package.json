@@ -1,6 +1,6 @@
 {
   "name": "ai-committer",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "description": "A simple CLI tool to automate git commits",
   "main": "src/index.js",
   "license": "MIT",
@@ -28,7 +28,7 @@
     "openai",
     "ollama"
   ],
-  "devDependencies": {
+  "dependencies": {
     "@types/node": "^22.10.5",
     "dotenv": "^16.4.7",
     "typescript": "^5.7.2"
