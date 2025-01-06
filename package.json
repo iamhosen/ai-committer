@@ -1,7 +1,6 @@
 {
   "name": "ai-committer",
   "version": "1.0.0",
-  "type": "module",
   "description": "A simple CLI tool to automate git commits",
   "main": "src/index.js",
   "license": "MIT",
