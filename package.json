@@ -1,6 +1,6 @@
 {
   "name": "ai-committer",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "A simple CLI tool to automate git commits",
   "main": "src/index.js",
   "license": "MIT",
@@ -12,6 +12,19 @@
     "start": "node dist/index.js",
     "dev": "ts-node-dev src/index.ts"
   },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/iamhosen/ai-committer"
+  },
+  "keywords": [
+    "git",
+    "commits",
+    "cli",
+    "ai",
+    "chatgpt",
+    "openai",
+    "ollama"
+  ],
   "devDependencies": {
     "@types/node": "^22.10.5",
     "typescript": "^5.7.2",
