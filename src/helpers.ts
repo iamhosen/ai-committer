@@ -56,4 +56,11 @@ const filterLockFiles = (diff: string) => {
   return filteredLines.join("\n");
 };
 
-export { getArgs, checkGitRepository, filterLockFiles };
+const commit = async (message: string) => {
+  execSync(`git commit -m '${message}'`);
+
+  console.log("\n🎉  Changes committed successfully!");
+
+};
+
+export { getArgs, checkGitRepository, filterLockFiles, commit };

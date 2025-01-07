@@ -2,8 +2,9 @@
 
 import { execSync } from "child_process";
 import { COMMIT_TYPE, IS_LIST, MODEL, NUM_COMMITS } from "./config";
-import { checkGitRepository, filterLockFiles } from "./helpers";
+import { checkGitRepository, commit, filterLockFiles } from "./helpers";
 import { getProvider } from "./providers";
+import { input, confirm } from "@inquirer/prompts";
 
 const generateCommit = async () => {
   const isGitRepository = checkGitRepository();
@@ -18,8 +19,10 @@ const generateCommit = async () => {
   diff = filterLockFiles(diff);
 
   if (!diff.trim()) {
-    console.error("No changes to commit.");
-    process.exit(1);
+    console.error(
+      "❌  No changes to commit. Staging changes before running this script."
+    );
+    process.exit();
   }
 
   const provider = getProvider();
@@ -34,13 +37,49 @@ const generateCommit = async () => {
     prompt = provider.getSinglePrompt(diff, { commitType: COMMIT_TYPE });
   }
 
+  let commitMessage = "";
   try {
-    const message = await provider.getCommitMessage(prompt, { model: MODEL });
-    console.log("✨  " + message);
+    commitMessage = await provider.getCommitMessage(prompt, { model: MODEL });
+    console.log("\n==================");
+    console.log("✨  " + commitMessage);
+    console.log("==================\n");
   } catch (error) {
-    console.error(error);
-    process.exit(1);
+    console.log("\n🚨  Generating commit message failed!");
+    process.exit();
   }
+
+  if (IS_LIST) {
+    process.exit();
+  }
+
+  try {
+    const confirmCommit = await confirm({
+      message: "Do you confirm the commit message?",
+    });
+
+    if (confirmCommit) {
+      commit(commitMessage);
+
+      process.exit(0);
+    }
+
+    const confirmEdit = await confirm({
+      message: "Do you want to edit the commit message?",
+    });
+
+    if (confirmEdit) {
+      const editedMessage = await input({
+        message: "Edit the commit message:",
+        default: commitMessage,
+      });
+
+      commit(editedMessage);
+    }
+  } catch (error) {
+    console.log("\n🚨  Commit Failed!");
+  }
+
+  process.exit(0);
 };
 
 generateCommit();
